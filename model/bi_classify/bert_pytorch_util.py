@@ -95,6 +95,7 @@ def load_pretrained_model_english(data_dir, num_hiddens, ffn_num_hiddens,
     bert.load_state_dict(torch.load(os.path.join(data_dir,'pretrained.params')))
     return bert, vocab
 
+from d2l import torch as d2l
 
 # 加载中文bert模型
 def load_pretrained_model_chinese(data_dir, num_hiddens, ffn_num_hiddens,

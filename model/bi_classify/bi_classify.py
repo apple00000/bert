@@ -4,22 +4,35 @@ from torch import nn
 from d2l import torch as d2l
 import pandas as pd
 
-
-# 单分类任务
-# 情感分析
+'''
+    bert 2分类模型
+'''
 class BERTClassifier(nn.Module):
     def __init__(self, bert):
         super(BERTClassifier, self).__init__()
         self.encoder = bert.encoder
-        self.hidden = bert.hidden
-        # 2表示分2类
-        self.output = nn.Linear(256, 2)
+        self.hidden = bert.hidden        # 768 -> 256
+        self.output = nn.Linear(256, 2)  # 2分类
 
     def forward(self, inputs):
+        '''
+            bert的encoder传3个参数:
+            tokens_X: 每个句子拆分后的id编码
+                eg: [[101, 1343, 1266, 776, 102, 0, 0, 0, 0, 0], [101, 5741, 3362, 1962, 1391, 102, 0, 0, 0, 0]]
+
+            segments_X: 0、1掩码,区分句子
+                eg: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+            valid_lens_x: 有效长度    
+                eg: [5, 6]
+        '''
         tokens_X, segments_X, valid_lens_x = inputs
         encoded_X = self.encoder(tokens_X, segments_X, valid_lens_x)
-        # 单分类任务，这里的0表示取编码第一位 [CLS]
-        # encoded_X维度：batch_size，句子长度，单字向量维度(768)
+
+        '''
+            单分类任务,这里的0表示取编码第一位 [CLS]
+            encoded_X维度:batch_size,句子长度,单字向量维度(768)
+        '''
         return self.output(self.hidden(encoded_X[:, 0, :]))                          
 
 
@@ -42,6 +55,7 @@ def train_batch(net, X, y, loss, trainer, devices):
     net.train()
     trainer.zero_grad()
     pred = net(X)
+
     l = loss(pred, y)
     print("loss：", l.mean())
     l.sum().backward()

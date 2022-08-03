@@ -7,8 +7,7 @@ import bi_classify
 if __name__ == '__main__':
     devices = d2l.try_all_gpus()
     bert, vocab = bert_pytorch_util.load_pretrained_model_chinese(
-    '../../data/chinese_L-12_H-768_A-12', num_hiddens=256, ffn_num_hiddens=512, num_heads=4,
-    num_layers=2, dropout=0.1, max_len=512, devices=devices)
+    '../../data/chinese_L-12_H-768_A-12', num_hiddens=256, ffn_num_hiddens=512, num_heads=4, num_layers=2, dropout=0, max_len=512, devices=devices)
 
     train_set = bi_classify.SNLIBERTDataset('test.csv', bi_classify.max_len+2, vocab)
     print("train_set",train_set.all_token_ids)
