@@ -14,7 +14,7 @@ if __name__ == '__main__':
     train_iter = torch.utils.data.DataLoader(train_set, 1, shuffle=False, num_workers = 4)
 
     net = bi_classify.BERTClassifier(bert)
-    net.load_state_dict(torch.load('class.params'))
+    net.load_state_dict(torch.load('bi_classify.params'))
 
     # 预测
     for i, (features, labels) in enumerate(train_iter):

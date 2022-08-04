@@ -3,6 +3,7 @@ import bert_pytorch_util as util
 from torch import nn
 from d2l import torch as d2l
 import pandas as pd
+import os
 
 '''
     bert 2分类模型
@@ -96,6 +97,9 @@ if __name__ == '__main__':
     train_iter = torch.utils.data.DataLoader(train_set, 512, shuffle=True, num_workers=4)
 
     net = BERTClassifier(bert)
+
+    if os.path.exists('bi_classify.params'):
+        net.load_state_dict(torch.load('bi_classify.params'))
 
     lr, num_epochs = 1e-4, 500
     trainer = torch.optim.Adam(net.parameters(), lr=lr)
